@@ -1,32 +1,53 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-export default function(ComposedComponent) {
-  class Authentication extends Component {
-    static contextTypes = {
-      router: React.PropTypes.object
-    }
+export default function(ComposedComponent){
+	class Authentication extends Component{
 
-    componentWillMount() {
-      if (!this.props.authenticated) {
-        this.context.router.push('/');
-      }
-    }
+		//Authentication.contextTypes
+		static contextTypes = {
+			router: React.PropTypes.object
+		}
 
-    componentWillUpdate(nextProps) {
-      if (!nextProps.authenticated) {
-        this.context.router.push('/');
-      }
-    }
+		componentWillMount(){
+			if(!this.props.authenticated){
+				this.context.router.push('/');
+			}
+		}
 
-    render() {
-      return <ComposedComponent {...this.props} />
-    }
-  }
+		componentWillUpdate(nextProps){
+			if(!nextProps.authenticated){
+				this.context.router.push('/');
+			}
+		}
 
-  function mapStateToProps(state) {
-    return { authenticated: state.authenticated };
-  }
+		render(){
+			return <ComposedComponent {...this.props}/>
+		}
+	}
 
-  return connect(mapStateToProps)(Authentication);
+	function mapStateToProps(state){
+		return{authenticated: state.authenticated}
+	}
+
+	return connect(mapStateToProps)(Authentication);
 }
+
+
+
+
+
+
+
+// In some other location ... Not in this file
+// We want to use this HOC
+
+//import Authentication //This is my HOC
+//import Resources //This is the component I want to wrap
+
+
+//This is what's going on behind the scenes:
+//const ComposedComponent = Authentication(Resources);
+
+//In some render method...
+//<ComposedComponent  resources={resourceList}/>
